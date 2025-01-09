@@ -47,6 +47,19 @@
             max-width: 600px;
             text-align: center;
         }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        .title {
+            color: #007acc;
+            font-size: 20px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +67,10 @@
         API Interaction Page
     </header>
     <main>
+        <div class="logo">
+            <img src="main/prtglogo.jpg" alt="PRTG Logo">
+            <div class="title">PRTG WINDOWS MAINTENANCE TOOL</div>
+        </div>
         <button id="fetchData">Fetch Data</button>
         <div id="output" class="output">Click the button to fetch data!</div>
     </main>
