@@ -14,7 +14,7 @@
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
-            background-color: #f4f4f9;
+            background-color: white;
         }
         header {
             background-color: #007acc;
@@ -40,7 +40,7 @@
         .output {
             margin-top: 20px;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid white;
             border-radius: 5px;
             background-color: white;
             width: 80%;
@@ -97,7 +97,7 @@
 
             try {
                 // API URL with the ID provided
-                const apiUrl = "http://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
+                const apiUrl = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
                 const response = await fetch(apiUrl);
 
                 if (!response.ok) {
