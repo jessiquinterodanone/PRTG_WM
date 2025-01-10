@@ -87,26 +87,22 @@
         <div id="output" class="output">Click a button to fetch data!</div>
         <div id="dropdownContainer" class="dropdown"></div>
     </main>
-
     <script>
-        document.getElementById('btnLaboratory').addEventListener('click', async () => {
+        document.getElementById('btnLaboratory').addEventListener('click', () => {
             const outputDiv = document.getElementById('output');
             const dropdownContainer = document.getElementById('dropdownContainer');
             outputDiv.textContent = 'Fetching data...';
             dropdownContainer.innerHTML = '';
-
-            try {
-                // API URL with the ID provided
-                const apiUrl = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
-                const response = await fetch(apiUrl);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+    
+            // JSONP callback function
+            window.myCallback = function (data) {
+                if (!data.groups || data.groups.length === 0) {
+                    outputDiv.textContent = 'No groups found.';
+                    return;
                 }
-
-                const data = await response.json();
+    
                 const groups = data.groups.map(group => ({ id: group.objid, name: group.group }));
-
+    
                 // Populate dropdown with groups
                 const select = document.createElement('select');
                 select.multiple = true;
@@ -116,18 +112,18 @@
                     option.textContent = group.name;
                     select.appendChild(option);
                 });
-
+    
                 const label = document.createElement('div');
                 label.textContent = 'Select the site:';
                 dropdownContainer.appendChild(label);
                 dropdownContainer.appendChild(select);
-
+    
                 // Handle selection
                 select.addEventListener('change', () => {
                     const selectedOptions = Array.from(select.selectedOptions);
                     if (selectedOptions.length === 1) {
                         const selectedGroup = selectedOptions[0].textContent;
-
+    
                         // Display configuration buttons
                         const configDiv = document.createElement('div');
                         configDiv.innerHTML = `
@@ -138,12 +134,16 @@
                         dropdownContainer.appendChild(configDiv);
                     }
                 });
-
+    
                 outputDiv.textContent = 'Data loaded successfully!';
-            } catch (error) {
-                outputDiv.textContent = `Error fetching data: ${error.message}`;
-            }
+            };
+    
+            // Dynamically create a script tag for JSONP
+            const script = document.createElement('script');
+            script.src = "http://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
+            document.body.appendChild(script);
         });
     </script>
+   
 </body>
 </html>
