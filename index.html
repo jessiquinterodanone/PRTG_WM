@@ -12,12 +12,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            justify-content: flex-start;
+            min-height: 100vh;
             background-color: #f4f4f9;
         }
         header {
-            background-color: #0069ccd7;
+            background-color: #007acc;
             color: white;
             padding: 10px 0;
             width: 100%;
@@ -25,7 +25,7 @@
             font-size: 24px;
         }
         button {
-            background-color: #0058cc;
+            background-color: #007acc;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -60,6 +60,9 @@
             font-size: 20px;
             margin-top: 10px;
         }
+        .dropdown {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -68,27 +71,75 @@
     </header>
     <main>
         <div class="logo">
-            <img src="main/prtglogo.jpg" >
-            <div class="title">PRTG WINDOWS MAINTENANCE TOOL</div>
+            <img src="main/prtglogo.jpg" alt="PRTG Logo">
+            <div class="title">Select the country to create the maintenance window?</div>
         </div>
-        <button id="fetchData">Fetch Data</button>
-        <div id="output" class="output">Click the button to fetch data!</div>
+
+        <!-- Buttons for each region -->
+        <button id="btnUS">US</button>
+        <button id="btnCanada">CANADA</button>
+        <button id="btnMexico">MEXICO</button>
+        <button id="btnColombia">COLOMBIA</button>
+        <button id="btnArgentina">ARGENTINA</button>
+        <button id="btnUruguay">URUGUAY</button>
+        <button id="btnLaboratory">LABORATORY</button>
+
+        <div id="output" class="output">Click a button to fetch data!</div>
+        <div id="dropdownContainer" class="dropdown"></div>
     </main>
 
     <script>
-        document.getElementById('fetchData').addEventListener('click', async () => {
+        document.getElementById('btnLaboratory').addEventListener('click', async () => {
             const outputDiv = document.getElementById('output');
+            const dropdownContainer = document.getElementById('dropdownContainer');
             outputDiv.textContent = 'Fetching data...';
+            dropdownContainer.innerHTML = '';
 
             try {
-                // Replace the URL below with your API endpoint
-                const response = await fetch('https://api.example.com/data');
+                // API URL with the ID provided
+                const apiUrl = "http://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7";
+                const response = await fetch(apiUrl);
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const data = await response.json();
-                outputDiv.textContent = JSON.stringify(data, null, 2);
+                const groups = data.groups.map(group => ({ id: group.objid, name: group.group }));
+
+                // Populate dropdown with groups
+                const select = document.createElement('select');
+                select.multiple = true;
+                groups.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = group.name;
+                    select.appendChild(option);
+                });
+
+                const label = document.createElement('div');
+                label.textContent = 'Select the site:';
+                dropdownContainer.appendChild(label);
+                dropdownContainer.appendChild(select);
+
+                // Handle selection
+                select.addEventListener('change', () => {
+                    const selectedOptions = Array.from(select.selectedOptions);
+                    if (selectedOptions.length === 1) {
+                        const selectedGroup = selectedOptions[0].textContent;
+
+                        // Display configuration buttons
+                        const configDiv = document.createElement('div');
+                        configDiv.innerHTML = `
+                            <p>What do you want to configure?</p>
+                            <button>WM all Site ${selectedGroup}</button>
+                            <button>WM on Site ${selectedGroup} device</button>
+                        `;
+                        dropdownContainer.appendChild(configDiv);
+                    }
+                });
+
+                outputDiv.textContent = 'Data loaded successfully!';
             } catch (error) {
                 outputDiv.textContent = `Error fetching data: ${error.message}`;
             }
