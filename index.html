@@ -56,9 +56,9 @@
             height: auto;
         }
         .title {
-            color: #007acc;
+            color: #007accc2;
             font-size: 20px;
-            margin-top: 10px;
+            margin-top: 30px;
         }
         .dropdown {
             margin-top: 20px;
@@ -94,7 +94,7 @@
     
             try {
                 // API URL
-                const apiUrl = "http://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7";
+                const apiUrl = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7";
                 const response = await fetch(apiUrl);
     
                 if (!response.ok) {
