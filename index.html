@@ -76,32 +76,24 @@
         </div>
 
         <!-- Buttons for each region -->
-        <button id="btnUS">US</button>
-        <button id="btnCanada">CANADA</button>
-        <button id="btnMexico">MEXICO</button>
-        <button id="btnColombia">COLOMBIA</button>
-        <button id="btnArgentina">ARGENTINA</button>
-        <button id="btnUruguay">URUGUAY</button>
         <button id="btnLaboratory">LABORATORY</button>
 
         <div id="output" class="output">Click a button to fetch data!</div>
-        <div id="dropdownContainer" class="dropdown"></div>
     </main>
     <script>
-        document.getElementById('btnLaboratory').addEventListener('click', async () => {
+        document.getElementById('btnLaboratory').addEventListener('click', () => {
             const outputDiv = document.getElementById('output');
             outputDiv.textContent = 'Fetching data...';
     
-            try {
-                // API URL
-                const apiUrl = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7";
-                const response = await fetch(apiUrl);
+            const apiUrl = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
+            
+            // Crear una etiqueta <script> para hacer la solicitud
+            const script = document.createElement('script');
+            script.src = apiUrl;
+            document.body.appendChild(script);
     
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-    
-                const data = await response.json();
+            // Función de callback para procesar los datos cuando se reciban
+            window.myCallback = function(data) {
                 const groups = data.groups;
     
                 if (!groups || groups.length === 0) {
@@ -109,21 +101,15 @@
                     return;
                 }
     
-                // Create a text area with the group names and IDs
+                outputDiv.textContent = 'Data loaded successfully!';
                 const textArea = document.createElement('textarea');
                 textArea.rows = 10;
                 textArea.cols = 50;
                 textArea.readOnly = true;
                 textArea.textContent = groups.map(group => `Group: ${group.group}, ID: ${group.objid}`).join('\n');
-    
-                outputDiv.textContent = 'Data loaded successfully!';
                 outputDiv.appendChild(textArea);
-            } catch (error) {
-                outputDiv.textContent = `Error fetching data: ${error.message}`;
-            }
+            };
         });
     </script>
-    
-   
 </body>
 </html>
