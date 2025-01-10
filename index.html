@@ -97,7 +97,7 @@
 
             try {
                 // API URL with the ID provided
-                const apiUrl = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7";
+                const apiUrl = "http://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
                 const response = await fetch(apiUrl);
 
                 if (!response.ok) {
