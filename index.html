@@ -113,3 +113,22 @@
     </script>
 </body>
 </html>
+
+
+<button onclick="runEmergencyWM()">INICIAR MANTENIMIENTO (EMERGENCIA)</button>
+
+<script>
+async function runEmergencyWM() {
+    const url = "https://10.29.124.109/api/table.json?content=groups&columns=objid,group,parentgroup&filter_parentid=2240&username=prtgadmin&password=N0tsoeasy7&callback=myCallback";
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            alert("Ventana de mantenimiento activada.");
+        } else {
+            alert("Error al activar WM.");
+        }
+    } catch (error) {
+        alert("Fallo de conexión con PRTG.");
+    }
+}
+</script>
